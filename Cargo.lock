@@ -1924,6 +1924,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "natural-gravity-engine"
+version = "0.1.0"
+dependencies = [
+ "amethyst",
+]
+
+[[package]]
 name = "nix"
 version = "0.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3330,13 +3337,6 @@ dependencies = [
  "wayland-client",
  "wayland-commons",
  "wayland-protocols",
-]
-
-[[package]]
-name = "space-curvature-engine"
-version = "0.1.0"
-dependencies = [
- "amethyst",
 ]
 
 [[package]]
