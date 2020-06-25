@@ -1,4 +1,4 @@
-# Curvature Graphing Engine
+# Space Curvature Engine
 
 | Created by | [Andrew Chen Wang](https://github.com/Andrew-Chen-Wang)
 |------------|----------------------
