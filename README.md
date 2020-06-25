@@ -83,11 +83,16 @@ properties of gravity does not need to be so difficult.
 
 I'm a total beginner in Rust, so...
 
-To run the master branch game, run the following command, which defaults
-to the `metal` graphics backend:
+To run the master branch game, run the following command (OS X):
 
 ```bash
-cargo run
+cargo run --features metal
+```
+
+For Windows or Linux:
+
+```bash
+cargo run --features vulkan
 ```
 
 ---
