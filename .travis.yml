@@ -1,0 +1,35 @@
+language: rust
+cache: cargo
+rust:
+  - stable
+
+jobs:
+  include:
+    - name: "OS X Test"
+      os: osx
+      script:
+        - cargo test --features "metal"
+
+    - name: "Linux Test"
+      os: linux
+      dist: xenial
+      install:
+        - sudo apt-get install libsdl2-dev
+      script:
+        - cargo test --features "vulkan"
+
+    - name: "Windows Test"
+      os: windows
+      # Not sure about DirectX 12, but oh well...
+      script:
+        - cargo test --features "vulkan"
+
+    - name: "Lint"
+      os: osx
+      before_script: rustup component add clippy
+      script:
+        - cargo clippy --features "metal"
+
+  allow_failures:
+    - name: "Lint"
+      if: branch = master
