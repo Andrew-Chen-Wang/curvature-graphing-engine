@@ -1,17 +1,29 @@
-# Space Curvature Engine
+# Natural Gravity Engine
 
 | Created by | [Andrew Chen Wang](https://github.com/Andrew-Chen-Wang)
 |------------|----------------------
 | Created on | 24 June 2020
 
-Physics engine with 4D graphs that mimics curvatures of space for researching gravitational waves.
+> Physics engine with 4D graphs that mimics curvatures of space for researching gravitational waves.
+
+This engine's core design lies in simple concepts. If you become too complex,
+incorporating new papers and ideas, the engine becomes unusable too quickly.
+Making everything simple allows for these old and new principles to be
+alive without even coding it: 
+
+This physics engine makes gravity an object (thank you VSauce; something about
+people attracting each other) because gravitational waves are "waves..." (maybe).
+This may allow for a little better understanding of how gravity affects other "objects".
+More on that in the dedicated section.
 
 ---
 ### Introduction
 
 This physics engine was designed to understand gravity and the curvature of space.
 It allows for creating objects and viewing a graph at the same time that
-the generated object bends space-time.
+the generated object bends space-time. Thus, unlike other physics engines,
+**gravity is represented as an invisible object in-game (more representable
+as the graph).**
 
 Generating an object begins with a "perfect" sphere with frozen time.
 You can also opt to generate an object while time continues. You can think
@@ -36,80 +48,53 @@ This project keeps in mind that plugins can be developed to extend the core
 framework. Please view the plugins section for open-source plugins
 that have been approved.
 
-Although I'm no astronomer, not even an amateur astronomer, I have a general
+Although I'm no astrophysicist, not even an amateur astronomer, I have a general
 interest in this field. If you see a conceptual problem, please open a GitHub
 issue. Thank you!
 
 ---
-### Usage
+### Why is gravity an object?
+
+Most physics engines that incorporate gravity make objects "attract" each
+other based on their density. This physics engine makes gravity an "object"
+because, if we stick with the gravitational wave theory that we may have
+detected in 2015, then it may allow researchers to better grasp WTF
+is going on with stuff.
+
+The reason why this won't break your computer because C++ is mostly OOP
+whereas Rust's amethyst goes data-driven, making it a lighter computer
+game. There was a great paper from 1958 (?) on rotating objects affecting
+the curvature of space that I feel like other engines completely miss.
+And that I'll miss too if I don't make gravity an object.
+
+Because its an object, its behavior is based on simple ideas. Making
+everything simple is not ground-breaking physics; it's how you will
+interact with the engine to make ground-breaking discoveries.
+
+The ideation of gravity being simple came about... 7 hours after creating
+this README. The reason is simple: new theories means new code. What if
+you didn't NEED any new code because the in-game physics already
+represented everything that could ever come about. I hopefully will create
+an engine that mimics the natural beauty of gravity so that discovering
+properties of gravity does not need to be so difficult.
+
+---
+### Beta Usage
 
 I'm a total beginner in Rust, so...
 
-To run the game, run the following command, which defaults to the `metal` graphics backend:
+To run the master branch game, run the following command, which defaults
+to the `metal` graphics backend:
 
 ```bash
 cargo run
 ```
 
-Windows and Linux users may explicitly choose `"vulkan"` with the following command:
-
-```bash
-cargo run --no-default-features --features "vulkan"
-```
-
-Mac OS X users may explicitly choose `"metal"` with the following command:
-
-```bash
-cargo run --no-default-features --features "metal"
-```
-
-Source: I just ran amethyst new etc.
-
 ---
 ### Plugins
 
 If you have a plugin, open a PR with your plugin's name with link (it must be
-open source to be considered on this list. [Inspiration](https://youtu.be/95Tc0Rk2cNg?t=260)).
-
----
-### Author's Inspiration
-
-I created this because of my unreal interest in atronomy with a lack of time
-to actually dive deep into it. Something that got me interested was Veritasium's
-video on the rarely detected gravitational waves,
-[TIMELAPSE OF THE FUTURE](https://www.youtube.com/watch?v=uD4izuDMUQA)
-for animation inspiration, and my general interest in trying out Rust.
-
-Another thing driving me forward was NASA's lack of funding with reason
-#5 from Mark Rober's video (it's been awhile since I watched it, so
-hopefully #5 was the correct number). I wanted to create an open source space
-launch program, like NASA's JPL, or at least something that could be
-philanthropically funded to inspire others, kind of like (that one
-astronomer who "stole" papers from his "master(?)/employer" and I
-can't believe I forgot the guy's name... I thought it was Keppler).
-But I really didn't gain much traction with my lack of effort.
-
-I've got a renewed interest after dealing with web apps for awhile...
-not that I've done too much frontend development myself. Mostly
-my interest in atronomy never really died, and I hope my inspiration
-can also spark some in other generations -- yound and old --
-who have yet to realize dive into the magnificent rabbit hole that
-is astronomy. **It's an amazing expanse of knowledge that greatly
-helped me in my journey in programming (really YouTube helped the
-most) by lending me ideas that I could translate into solutions
-for some of my most complex situations.**
-
-YouTube videos, any like gaming, educational, even Gordon Ramsey
-cooking and shouting, can help one learn more and translate
-ideas from a concept of one subject to a solution or an idea
-of a completely different subject.
-
-That's my joy in life, and I hope this helps others to try
-and do the same. No one person is alike, but I've found
-this strategy of taking an idea from one place and installing
-it in another to be a really cool way of expanding one's creativity.
-(e.g. I mentioned CAD. Friend going into biomechanical engineering,
-so that's where I got the concept for generating objects from).
+[open source]((https://youtu.be/95Tc0Rk2cNg?t=260)) to be considered on this list).
 
 ---
 ### License and Contact
