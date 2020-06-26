@@ -1,52 +1,20 @@
 mod core;
 mod construct;
+mod states;
 
 use amethyst::{
     utils::application_root_dir,
-    SimpleState, GameDataBuilder, Application,
-    StateData, GameData,
+    GameDataBuilder, Application,
     renderer::{
         plugins::{RenderPbr3D, RenderToWindow},
         types::DefaultBackend,
         RenderingBundle
     },
-    input::{is_key_down, InputBundle, StringBindings},
     window::DisplayConfig,
     core::TransformBundle,
-    prelude::*,
-    controls::{FlyControlBundle, HideCursor},
-    winit::VirtualKeyCode
+    controls::FlyControlBundle,
+    input::{InputBundle, StringBindings},
 };
-
-struct GameState;
-impl SimpleState for GameState {
-    fn on_start(&mut self, state_data: StateData<'_, GameData<'_, '_>>) {
-        core::camera::initialize_camera(state_data.world);
-        construct::sphere::initialize_sphere(state_data.world);
-        core::light::initialize_light(state_data.world);
-
-        // User can press the rotate button to rotate.
-        // TODO Use CMD/Ctrl and click to rotate instead of this.
-        // let StateData { world, .. } = state_data;
-        // let mut hide_cursor = world.write_resource::<HideCursor>();
-        // hide_cursor.hide = false;
-    }
-
-    fn handle_event(
-        &mut self,
-        data: StateData<'_, GameData<'_, '_>>,
-        event: StateEvent,
-    ) -> SimpleTrans {
-        let StateData {world, ..} = data;
-        if let StateEvent::Window(event) = &event {
-            if is_key_down(&event, VirtualKeyCode::Escape) {
-                let mut hide_cursor = world.write_resource::<HideCursor>();
-                hide_cursor.hide = false;
-            }
-        }
-        Trans::None
-    }
-}
 
 fn main() -> amethyst::Result<()> {
     // Set up the Amethyst logger
@@ -72,7 +40,9 @@ fn main() -> amethyst::Result<()> {
                 Some(String::from("move_x")),
                 Some(String::from("move_y")),
                 Some(String::from("move_z")),
-            ).with_sensitivity(0.1, 0.1),
+            )
+                .with_sensitivity(0.1, 0.1)
+                .with_speed(8.5),
         )?
         .with_bundle(
             TransformBundle::new().with_dep(&["fly_movement"])
@@ -93,7 +63,7 @@ fn main() -> amethyst::Result<()> {
     // Run the game!
     let mut game = Application::new(
         assets_dir,
-        GameState,
+        states::GameState,
         game_data
     )?;
     game.run();

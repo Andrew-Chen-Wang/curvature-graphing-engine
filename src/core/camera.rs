@@ -13,5 +13,7 @@ pub fn initialize_camera(world: &mut World) {
         .with(Camera::standard_3d(800.0, 600.0))
         .with(transform)
         .build();
-    world.write_storage::<FlyControlTag>().insert(entity, Default::default());
+    world.write_storage::<FlyControlTag>()
+        .insert(entity, Default::default())
+        .expect("unable to attach FlyControlTag to camera");
 }
