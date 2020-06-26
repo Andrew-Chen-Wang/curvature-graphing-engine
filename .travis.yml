@@ -25,10 +25,11 @@ jobs:
         - cargo test --features "vulkan"
 
     - name: "Lint"
-      os: osx
+      os: linux
+      dist: xenial
       before_script: rustup component add clippy
       script:
-        - cargo clippy --features "metal"
+        - cargo clippy --features "vulkan"
 
   allow_failures:
     - name: "Lint"
