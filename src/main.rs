@@ -1,32 +1,50 @@
-use amethyst::utils::application_root_dir;
+mod core;
+mod construct;
+
 use amethyst::{
+    utils::application_root_dir,
     SimpleState, GameDataBuilder, Application,
-    StateData, GameData
+    StateData, GameData,
+    renderer::{
+        plugins::{RenderPbr3D, RenderToWindow},
+        types::DefaultBackend,
+        RenderingBundle
+    },
+    input::{is_key_down, InputBundle, StringBindings},
+    window::DisplayConfig,
+    core::TransformBundle,
+    prelude::*,
+    controls::{FlyControlBundle, HideCursor},
+    winit::VirtualKeyCode
 };
-use amethyst::renderer::{
-    plugins::{RenderPbr3D, RenderToWindow},
-    types::DefaultBackend,
-    RenderingBundle, Camera,
-    MaterialDefaults, Material,
-    Mesh
-};
-use amethyst::window::DisplayConfig;
-use amethyst::prelude::{World, Builder, WorldExt};
-use amethyst::assets::AssetLoaderSystemData;
-use amethyst::renderer::rendy::mesh::{
-    Position, Normal, Tangent, TexCoord
-};
-use amethyst::renderer::shape::Shape;
-use amethyst::core::{Transform, TransformBundle};
-use amethyst::renderer::light::{Light, PointLight};
-use amethyst::renderer::palette::rgb::Rgb;
 
 struct GameState;
 impl SimpleState for GameState {
     fn on_start(&mut self, state_data: StateData<'_, GameData<'_, '_>>) {
-        initialize_camera(state_data.world);
-        initialize_sphere(state_data.world);
-        initialize_light(state_data.world);
+        core::camera::initialize_camera(state_data.world);
+        construct::sphere::initialize_sphere(state_data.world);
+        core::light::initialize_light(state_data.world);
+
+        // User can press the rotate button to rotate.
+        // TODO Use CMD/Ctrl and click to rotate instead of this.
+        // let StateData { world, .. } = state_data;
+        // let mut hide_cursor = world.write_resource::<HideCursor>();
+        // hide_cursor.hide = false;
+    }
+
+    fn handle_event(
+        &mut self,
+        data: StateData<'_, GameData<'_, '_>>,
+        event: StateEvent,
+    ) -> SimpleTrans {
+        let StateData {world, ..} = data;
+        if let StateEvent::Window(event) = &event {
+            if is_key_down(&event, VirtualKeyCode::Escape) {
+                let mut hide_cursor = world.write_resource::<HideCursor>();
+                hide_cursor.hide = false;
+            }
+        }
+        Trans::None
     }
 }
 
@@ -45,9 +63,20 @@ fn main() -> amethyst::Result<()> {
         ..Default::default()
     };
 
+    let key_bindings_path = app_root.join("config/input.ron");
+
     // Set up the GameDataBuilder
     let game_data = GameDataBuilder::default()
-        .with_bundle(TransformBundle::new())?
+        .with_bundle(
+            FlyControlBundle::<StringBindings>::new(
+                Some(String::from("move_x")),
+                Some(String::from("move_y")),
+                Some(String::from("move_z")),
+            ).with_sensitivity(0.1, 0.1),
+        )?
+        .with_bundle(
+            TransformBundle::new().with_dep(&["fly_movement"])
+        )?
         .with_bundle(
             RenderingBundle::<DefaultBackend>::new()
                 // The RenderToWindow plugin provides all the scaffolding for opening a window and drawing on it
@@ -55,8 +84,10 @@ fn main() -> amethyst::Result<()> {
                     RenderToWindow::from_config(display_config)
                         .with_clear([0.529, 0.808, 0.98, 1.0]),
                 )
-                // RenderFlat2D plugin is used to render entities with a `SpriteRender` component.
                 .with_plugin(RenderPbr3D::default()),
+        )?
+        .with_bundle(
+            InputBundle::<StringBindings>::new().with_bindings_from_file(&key_bindings_path)?,
         )?;
 
     // Run the game!
@@ -68,60 +99,4 @@ fn main() -> amethyst::Result<()> {
     game.run();
 
     Ok(())
-}
-
-fn initialize_camera(world: &mut World) {
-    let mut transform = Transform::default();
-    transform.set_translation_xyz(0.0, 0.0, 10.0);
-
-    world.create_entity()
-        .with(Camera::standard_3d(1024.0, 768.0))
-        .with(transform)
-        .build();
-}
-
-fn initialize_sphere(world: &mut World) {
-    let mesh = world.exec(|loader: AssetLoaderSystemData<'_, Mesh>| {
-        loader.load_from_data(
-            Shape::Sphere(100, 100)
-                .generate::<(Vec<Position>, Vec<Normal>, Vec<Tangent>, Vec<TexCoord>)>(None)
-                .into(),
-            (),
-        )
-    });
-
-    let material_defaults = world.read_resource::<MaterialDefaults>().0.clone();
-    let material = world.exec(|loader: AssetLoaderSystemData<'_, Material>| {
-        loader.load_from_data(
-            Material {
-                ..material_defaults
-            },
-            (),
-        )
-    });
-
-    let mut transform = Transform::default();
-    transform.set_translation_xyz(0.0, 0.0, 0.0);
-
-    world.create_entity()
-        .with(mesh)
-        .with(material)
-        .with(transform)
-        .build();
-}
-
-fn initialize_light(world: &mut World) {
-    let light: Light = PointLight {
-        intensity: 10.0,
-        color: Rgb::new(1.0, 1.0, 1.0),
-        ..PointLight::default()
-    }.into();
-
-    let mut transform = Transform::default();
-    transform.set_translation_xyz(5.0, 5.0, 20.0);
-
-    world.create_entity()
-        .with(light)
-        .with(transform)
-        .build();
 }
