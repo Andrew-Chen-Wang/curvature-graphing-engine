@@ -56,8 +56,8 @@ issue. Thank you!
 ### Why is gravity an object?
 
 Most physics engines that incorporate gravity make objects "attract" each
-other based on their density. This physics engine makes gravity an "object"
-because, if we stick with the gravitational wave theory that we may have
+other based on their mass and density. This physics engine makes gravity an "object"
+because, if we stick with the gravitational wave theory that we have
 detected in 2015, then it may allow researchers to better grasp WTF
 is going on with stuff.
 
