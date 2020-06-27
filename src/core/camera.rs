@@ -1,8 +1,9 @@
 use amethyst::{
     renderer::Camera,
     prelude::{World, Builder, WorldExt},
+    utils::auto_fov::AutoFov,
     core::Transform,
-    controls::FlyControlTag
+    controls::FlyControlTag,
 };
 
 pub fn initialize_camera(world: &mut World) {
@@ -13,7 +14,12 @@ pub fn initialize_camera(world: &mut World) {
         .with(Camera::standard_3d(800.0, 600.0))
         .with(transform)
         .build();
+    // Helps to change object size on screen due to aspect ratios.
+    world.write_component::<AutoFov>()
+        .insert(entity, Default::default())
+        .expect("Unable to attach AutoFov to camera.");
+    // For flying and rotating
     world.write_storage::<FlyControlTag>()
         .insert(entity, Default::default())
-        .expect("unable to attach FlyControlTag to camera");
+        .expect("Unable to attach FlyControlTag to camera");
 }

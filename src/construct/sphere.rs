@@ -7,10 +7,11 @@ use amethyst::{
     },
     prelude::{World, Builder, WorldExt},
     assets::AssetLoaderSystemData,
-    core::Transform
+    core::Transform,
+    ecs::Entity,
 };
 
-pub fn initialize_sphere(world: &mut World) {
+pub fn initialize_sphere(world: &mut World) -> Entity {
     let mesh = world.exec(|loader: AssetLoaderSystemData<'_, Mesh>| {
         loader.load_from_data(
             Shape::Sphere(100, 100)
@@ -37,5 +38,5 @@ pub fn initialize_sphere(world: &mut World) {
         .with(mesh)
         .with(material)
         .with(transform)
-        .build();
+        .build()
 }

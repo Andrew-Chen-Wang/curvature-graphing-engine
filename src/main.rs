@@ -1,9 +1,13 @@
 mod core;
 mod construct;
-mod states;
+mod game;
+// mod menu;
 
 use amethyst::{
-    utils::application_root_dir,
+    utils::{
+        application_root_dir,
+        auto_fov::AutoFovSystem,
+    },
     GameDataBuilder, Application,
     renderer::{
         plugins::{RenderPbr3D, RenderToWindow},
@@ -44,6 +48,7 @@ fn main() -> amethyst::Result<()> {
                 .with_sensitivity(0.1, 0.1)
                 .with_speed(8.5),
         )?
+        .with(AutoFovSystem::new(), "auto_fov", &[])
         .with_bundle(
             TransformBundle::new().with_dep(&["fly_movement"])
         )?
@@ -63,7 +68,7 @@ fn main() -> amethyst::Result<()> {
     // Run the game!
     let mut game = Application::new(
         assets_dir,
-        states::GameState,
+        game::GameState::default(),
         game_data
     )?;
     game.run();

@@ -1928,6 +1928,7 @@ name = "natural-gravity-engine"
 version = "0.1.0"
 dependencies = [
  "amethyst",
+ "log",
 ]
 
 [[package]]
