@@ -109,6 +109,8 @@ The code in this repository is licensed under the
 I'm considering changing this license if more contributors
 come and help as I definitely cannot maintain this forever.
 
+This project uses Material Icons: [License](https://github.com/google/material-design-icons/blob/master/LICENSE)
+
 If you'd like to contact me, please email me by pressing this link:
 
 [Andrew Wang at acwangpython@gmail.com](mailto:acwangpython@gmail.com?subject=[GH%20Space%20Curvature])

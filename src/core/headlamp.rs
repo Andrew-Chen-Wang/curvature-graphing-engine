@@ -30,7 +30,7 @@ pub fn initialize_light(world: &mut World) -> Entity {
 pub struct HeadlampSystem;
 
 /// Updates the headlamp.
-/// Mainly used for moving it around and turning it on/off
+/// Mainly used for moving it with user.
 impl<'a> System<'a> for HeadlampSystem {
     type SystemData = (
         ReadStorage<'a, Camera>,
@@ -44,9 +44,7 @@ impl<'a> System<'a> for HeadlampSystem {
         // Get camera's transform and set the headlamp's to the same.
         // Because of other states, we know unwrap can panic
         // plus the light can be turned off.
-        let camera_values = (&cameras, &mut transforms).join().next();
-        if camera_values.is_some() {
-            let (_, target_transform) = camera_values.unwrap();
+        if let Some((_, target_transform)) = (&cameras, &mut transforms).join().next() {
             let camera_isometry = *target_transform.isometry();
             for (_, transform) in (&mut lights, &mut transforms).join() {
                 transform.set_isometry(camera_isometry);
