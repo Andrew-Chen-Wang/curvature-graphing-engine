@@ -1,14 +1,13 @@
 use amethyst::{
-    renderer::{
-        shape::Shape,
-        rendy::mesh::{Position, Normal, Tangent, TexCoord},
-        MaterialDefaults, Material,
-        Mesh
-    },
-    prelude::{World, Builder, WorldExt},
     assets::AssetLoaderSystemData,
     core::Transform,
     ecs::Entity,
+    prelude::{Builder, World, WorldExt},
+    renderer::{
+        rendy::mesh::{Normal, Position, Tangent, TexCoord},
+        shape::Shape,
+        Material, MaterialDefaults, Mesh,
+    },
 };
 
 pub fn initialize_sphere(world: &mut World) -> Entity {
@@ -34,7 +33,8 @@ pub fn initialize_sphere(world: &mut World) -> Entity {
     let mut transform = Transform::default();
     transform.set_translation_xyz(0.0, 0.0, 0.0);
 
-    world.create_entity()
+    world
+        .create_entity()
         .with(mesh)
         .with(material)
         .with(transform)

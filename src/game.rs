@@ -1,22 +1,21 @@
 use amethyst::{
-    SimpleState, StateData, GameData,
-    StateEvent, SimpleTrans,
-    prelude::{World, WorldExt},
     controls::HideCursor,
-    ui::{Anchor, UiButtonBuilder, UiImage, UiEventType},
+    core::Transform,
+    ecs::Entity,
     input::{is_close_requested, is_key_down},
-    winit::VirtualKeyCode,
     prelude::Trans,
+    prelude::{World, WorldExt},
+    ui::{Anchor, UiButtonBuilder, UiEventType, UiImage},
+    winit::VirtualKeyCode,
+    GameData, SimpleState, SimpleTrans, StateData, StateEvent,
 };
 
 use crate::construct::sphere::initialize_sphere;
-use crate::core::{
-    camera::initialize_camera,
-    headlamp::initialize_light
-};
+use crate::core::{camera::initialize_camera, headlamp::initialize_light};
 
 #[derive(Default)]
 pub struct GameState {
+    headlamp: Option<Entity>,
     paused: bool,
 
     // Buttons in the menu
@@ -38,7 +37,7 @@ impl SimpleState for GameState {
         let StateData { world, .. } = state_data;
         initialize_camera(world);
         initialize_sphere(world);
-        initialize_light(world);
+        self.headlamp = Some(initialize_light(world));
 
         // Initialize menu
         // Manually supply id in case of collision
@@ -66,7 +65,7 @@ impl SimpleState for GameState {
         data: StateData<'_, GameData<'_, '_>>,
         event: StateEvent,
     ) -> SimpleTrans {
-        let StateData {world, ..} = data;
+        let StateData { world, .. } = data;
         match &event {
             StateEvent::Window(event) => {
                 if is_key_down(&event, VirtualKeyCode::Escape) {
@@ -74,14 +73,16 @@ impl SimpleState for GameState {
                     let mut hide_cursor = world.write_resource::<HideCursor>();
                     hide_cursor.hide = false;
                 } else if is_close_requested(&event) {
-                    return Trans::Quit
+                    return Trans::Quit;
                 }
                 // TODO Allow point manipulation and central point scaling big/small.
             }
             StateEvent::Ui(ui_event) => {
                 let target_id = ui_event.target.id();
                 // TODO Add tooltips for menu buttons
-                if target_id == self.rotate_camera_button && ui_event.event_type == UiEventType::ClickStop {
+                if target_id == self.rotate_camera_button
+                    && ui_event.event_type == UiEventType::ClickStop
+                {
                     // Press escape to get out of camera rotation.
                     let mut hide_cursor = world.write_resource::<HideCursor>();
                     hide_cursor.hide = true;
@@ -109,5 +110,5 @@ fn create_menu_button(world: &mut World, text: &str, id: u32) -> u32 {
         .with_image(UiImage::SolidColor([0.8, 0.6, 0.3, 1.0]))
         .with_hover_image(UiImage::SolidColor([0.1, 0.1, 0.1, 0.5]))
         .build_from_world(&world);
-    return button.image_entity.id()
+    return button.image_entity.id();
 }

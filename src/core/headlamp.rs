@@ -1,11 +1,11 @@
 use amethyst::{
+    core::Transform,
+    ecs::prelude::Entity,
+    prelude::{Builder, World, WorldExt},
     renderer::{
         light::{Light, PointLight},
-        palette::rgb::Rgb
+        palette::rgb::Rgb,
     },
-    prelude::{World, Builder, WorldExt},
-    core::Transform,
-    ecs::prelude::Entity
 };
 
 /// Initializes a headlamp for the user. Optionally can be turned
@@ -15,13 +15,12 @@ pub fn initialize_light(world: &mut World) -> Entity {
         intensity: 10.0,
         color: Rgb::new(1.0, 1.0, 1.0),
         ..PointLight::default()
-    }.into();
+    }
+    .into();
 
+    // TODO Delete this when you start creating an initial object on your own
     let mut transform = Transform::default();
     transform.set_translation_xyz(5.0, 5.0, 20.0);
 
-    world.create_entity()
-        .with(light)
-        .with(transform)
-        .build()
+    world.create_entity().with(light).with(transform).build()
 }

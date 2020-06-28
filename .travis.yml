@@ -27,9 +27,9 @@ jobs:
     - name: "Lint"
       os: linux
       dist: xenial
-      before_script: rustup component add clippy
+      before_script: rustup component add rustfmt
       script:
-        - cargo clippy --features "vulkan"
+        - cargo fmt -- --check --write-mode=diff
 
   allow_failures:
     - name: "Lint"

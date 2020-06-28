@@ -1,24 +1,21 @@
-mod core;
 mod construct;
+mod core;
 mod game;
 // mod menu;
 
 use amethyst::{
-    utils::{
-        application_root_dir,
-        auto_fov::AutoFovSystem,
-    },
-    GameDataBuilder, Application,
+    controls::FlyControlBundle,
+    core::TransformBundle,
+    input::{InputBundle, StringBindings},
     renderer::{
         plugins::{RenderPbr3D, RenderToWindow},
         types::DefaultBackend,
-        RenderingBundle
+        RenderingBundle,
     },
+    ui::{RenderUi, UiBundle},
+    utils::{application_root_dir, auto_fov::AutoFovSystem},
     window::DisplayConfig,
-    core::TransformBundle,
-    controls::FlyControlBundle,
-    input::{InputBundle, StringBindings},
-    ui::{UiBundle, RenderUi},
+    Application, GameDataBuilder,
 };
 
 fn main() -> amethyst::Result<()> {
@@ -32,7 +29,7 @@ fn main() -> amethyst::Result<()> {
     // Set up the display configuration
     let display_config = DisplayConfig {
         title: "Natural Gravity Engine".to_string(),
-        dimensions: Some((800, 600)),  // 4:3
+        dimensions: Some((800, 600)), // 4:3
         ..Default::default()
     };
 
@@ -46,13 +43,11 @@ fn main() -> amethyst::Result<()> {
                 Some(String::from("move_y")),
                 Some(String::from("move_z")),
             )
-                .with_sensitivity(0.1, 0.1)
-                .with_speed(8.5),
+            .with_sensitivity(0.1, 0.1)
+            .with_speed(8.5),
         )?
         .with(AutoFovSystem::new(), "auto_fov", &[])
-        .with_bundle(
-            TransformBundle::new().with_dep(&["fly_movement"])
-        )?
+        .with_bundle(TransformBundle::new().with_dep(&["fly_movement"]))?
         .with_bundle(
             RenderingBundle::<DefaultBackend>::new()
                 // The RenderToWindow plugin provides all the scaffolding for opening a window and drawing on it
@@ -69,11 +64,7 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(UiBundle::<StringBindings>::new())?;
 
     // Run the game!
-    let mut game = Application::new(
-        assets_dir,
-        game::GameState::default(),
-        game_data
-    )?;
+    let mut game = Application::new(assets_dir, game::GameState::default(), game_data)?;
     game.run();
 
     Ok(())
