@@ -1,6 +1,5 @@
 use amethyst::{
     controls::HideCursor,
-    core::Transform,
     ecs::Entity,
     input::{is_close_requested, is_key_down},
     prelude::Trans,
@@ -26,12 +25,6 @@ pub struct GameState {
     light_on: bool,
 }
 
-const OPEN_MENU_TEXT: &str = "↑";
-const CLOSE_MENU_TEXT: &str = "↓";
-
-const ROTATE_TEXT: &str = "↺";
-const LIGHT_BULB_TEXT: &str = "💡";
-
 impl SimpleState for GameState {
     fn on_start(&mut self, state_data: StateData<'_, GameData<'_, '_>>) {
         let StateData { world, .. } = state_data;
@@ -41,7 +34,7 @@ impl SimpleState for GameState {
 
         // Initialize menu
         // Manually supply id in case of collision
-        self.rotate_camera_button = create_menu_button(world, ROTATE_TEXT, 123);
+        self.rotate_camera_button = create_menu_button(world, "", 123);
 
         // User can press the rotate button to rotate, so initially not in rotate.
         let mut hide_cursor = world.write_resource::<HideCursor>();

@@ -1,7 +1,6 @@
 mod construct;
 mod core;
 mod game;
-// mod menu;
 
 use amethyst::{
     controls::FlyControlBundle,
@@ -46,22 +45,26 @@ fn main() -> amethyst::Result<()> {
             .with_sensitivity(0.1, 0.1)
             .with_speed(8.5),
         )?
-        .with(AutoFovSystem::new(), "auto_fov", &[])
         .with_bundle(TransformBundle::new().with_dep(&["fly_movement"]))?
+        .with_bundle(
+            InputBundle::<StringBindings>::new().with_bindings_from_file(&key_bindings_path)?,
+        )?
+        .with(AutoFovSystem::new(), "auto_fov", &[])
+        .with_bundle(UiBundle::<StringBindings>::new())?
+        .with(
+            core::headlamp::HeadlampSystem::default(),
+            "headlamp_system",
+            &["input_system"],
+        )
         .with_bundle(
             RenderingBundle::<DefaultBackend>::new()
                 // The RenderToWindow plugin provides all the scaffolding for opening a window and drawing on it
                 .with_plugin(
-                    RenderToWindow::from_config(display_config)
-                        .with_clear([0.529, 0.808, 0.98, 1.0]),
+                    RenderToWindow::from_config(display_config).with_clear([0., 0., 0., 1.0]),
                 )
                 .with_plugin(RenderUi::default())
                 .with_plugin(RenderPbr3D::default()),
-        )?
-        .with_bundle(
-            InputBundle::<StringBindings>::new().with_bindings_from_file(&key_bindings_path)?,
-        )?
-        .with_bundle(UiBundle::<StringBindings>::new())?;
+        )?;
 
     // Run the game!
     let mut game = Application::new(assets_dir, game::GameState::default(), game_data)?;
