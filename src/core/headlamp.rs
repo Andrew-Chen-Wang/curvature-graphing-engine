@@ -13,7 +13,7 @@ use amethyst::{
 /// off for photon usage.
 pub fn initialize_light(world: &mut World) -> Entity {
     let light: Light = PointLight {
-        intensity: 10.0,
+        intensity: 7.0,
         color: Rgb::new(1.0, 1.0, 1.0),
         ..PointLight::default()
     }
@@ -42,10 +42,15 @@ impl<'a> System<'a> for HeadlampSystem {
         let (cameras, mut lights, mut transforms) = data;
 
         // Get camera's transform and set the headlamp's to the same.
-        let (_, target_transform) = ((&cameras, &mut transforms).join().next()).unwrap();
-        let camera_isometry = *target_transform.isometry();
-        for (_, transform) in (&mut lights, &mut transforms).join() {
-            transform.set_isometry(camera_isometry);
+        // Because of other states, we know unwrap can panic
+        // plus the light can be turned off.
+        let camera_values = (&cameras, &mut transforms).join().next();
+        if camera_values.is_some() {
+            let (_, target_transform) = camera_values.unwrap();
+            let camera_isometry = *target_transform.isometry();
+            for (_, transform) in (&mut lights, &mut transforms).join() {
+                transform.set_isometry(camera_isometry);
+            }
         }
     }
 }
