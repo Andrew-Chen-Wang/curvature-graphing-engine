@@ -29,7 +29,7 @@ jobs:
       dist: xenial
       before_script: rustup component add rustfmt
       script:
-        - cargo fmt -- --check --write-mode=diff
+        - cargo fmt -- --check
 
   allow_failures:
     - name: "Lint"
