@@ -18,6 +18,7 @@ use amethyst::{
     core::TransformBundle,
     controls::FlyControlBundle,
     input::{InputBundle, StringBindings},
+    ui::{UiBundle, RenderUi},
 };
 
 fn main() -> amethyst::Result<()> {
@@ -59,11 +60,13 @@ fn main() -> amethyst::Result<()> {
                     RenderToWindow::from_config(display_config)
                         .with_clear([0.529, 0.808, 0.98, 1.0]),
                 )
+                .with_plugin(RenderUi::default())
                 .with_plugin(RenderPbr3D::default()),
         )?
         .with_bundle(
             InputBundle::<StringBindings>::new().with_bindings_from_file(&key_bindings_path)?,
-        )?;
+        )?
+        .with_bundle(UiBundle::<StringBindings>::new())?;
 
     // Run the game!
     let mut game = Application::new(

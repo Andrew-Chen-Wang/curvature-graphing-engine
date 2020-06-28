@@ -6,7 +6,8 @@ edition = "2018"
 license = "LGPL-3.0"
 
 [dependencies]
-amethyst = "0.15.0"
+# Supposed to be 0.15.1 since a fix was made for UIButtons.
+amethyst = { git = "https://github.com/amethyst/amethyst", branch = "master" }
 log = "0.4.8"
 
 [features]
