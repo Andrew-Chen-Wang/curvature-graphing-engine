@@ -120,7 +120,7 @@ impl SimpleState for GameState {
                             let _ = hidden.insert(self.scale_object.unwrap(), Hidden);
                             let _ = hidden.insert(self.delete_object.unwrap(), Hidden);
                             let _ = hidden.insert(self.headlamp_button.unwrap(), Hidden);
-                            // show_hide_bottom_menu: Entity
+                            let _ = hidden.insert(self.background_image.unwrap(), Hidden);
                         } else {
                             let mut hidden = world.write_storage::<Hidden>();
                             let _ = hidden.remove(self.rotate_camera_button.unwrap());
@@ -129,6 +129,7 @@ impl SimpleState for GameState {
                             let _ = hidden.remove(self.scale_object.unwrap());
                             let _ = hidden.remove(self.delete_object.unwrap());
                             let _ = hidden.remove(self.headlamp_button.unwrap());
+                            let _ = hidden.remove(self.background_image.unwrap());
                         }
                         self.menu_shown = !self.menu_shown;
                     }
@@ -163,11 +164,11 @@ impl GameState {
         self.background_image = Some(bi);
 
         // Manually supply id in case of collision
+        self.show_hide_bottom_menu =
+            self.create_menu_button(world, "toolbar/open_hide_menu.png", 310., 25.);
         self.rotate_camera_button =
             self.create_menu_button(world, "toolbar/3d_rotation.png", -200., 100.);
         self.headlamp_button = self.create_menu_button(world, "toolbar/headlamp.png", -100., 100.);
-        self.show_hide_bottom_menu =
-            self.create_menu_button(world, "toolbar/open_hide_menu.png", 200., 100.);
         self.add_object = self.create_menu_button(world, "toolbar/add_obj.png", 50., 50.);
         self.morph_object = self.create_menu_button(world, "toolbar/wrench_edit.png", 100., 50.);
         self.delete_object = self.create_menu_button(world, "toolbar/trash.png", 50., 100.);
